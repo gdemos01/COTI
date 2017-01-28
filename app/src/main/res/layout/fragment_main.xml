@@ -23,6 +23,19 @@
         android:src="@drawable/face"
         android:layout_centerInParent="true"/>
 
+    <TextView
+        android:id="@+id/asking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_margin="15dp"
+        android:layout_centerHorizontal="true"
+        android:text="Is this knowledge True or False ?"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_above="@+id/questionResponses"/>
+
     <LinearLayout
         android:id="@+id/questionResponses"
         android:layout_width="match_parent"
@@ -50,7 +63,7 @@
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="disagree"
+            android:text="false"
             android:textSize="18dp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -63,7 +76,7 @@
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="agree"
+            android:text="true"
             android:textSize="18dp"
             android:layout_gravity="center"
             android:gravity="center"

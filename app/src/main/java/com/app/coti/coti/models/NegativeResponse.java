@@ -22,10 +22,18 @@ public class NegativeResponse {
 
     public void populateDisagreement(){
         disagreement.add("Really?");
+        disagreement.add("Really?");
+        disagreement.add("hm...");
+        disagreement.add("Correcting...");
+        disagreement.add("Learning...");
     }
 
     public void populateResponses(){
         responses.add("NO");
+        responses.add("Not really!");
+        responses.add("I don't believe that");
+        responses.add("I don't think so");
+        responses.add("Wrong!");
     }
 
     public int getAmount() {

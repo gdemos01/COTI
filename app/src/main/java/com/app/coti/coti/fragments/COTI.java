@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.app.coti.coti.MainActivity;
 import com.app.coti.coti.R;
 import com.app.coti.coti.brain.GetKnowledge;
+import com.app.coti.coti.brain.UpdateKnowledge;
 import com.app.coti.coti.models.Knowledge;
 import com.app.coti.coti.models.NegativeResponse;
 import com.app.coti.coti.models.PositiveResponse;
@@ -29,6 +30,7 @@ public class COTI extends Fragment {
     private TextView agree;
     private TextView disagree;
     private TextView skip;
+    private TextView asking;
     private TextView report;
     private LinearLayout questionResponses;
     public static  Typewriter writer;
@@ -71,6 +73,7 @@ public class COTI extends Fragment {
 
         writer = new Typewriter((TextView)view.findViewById(R.id.tongue_coti));
         questionResponses = (LinearLayout) view.findViewById(R.id.questionResponses);
+        asking = (TextView) view.findViewById(R.id.asking);
 
         knowledge = MainActivity.memory.getKnowledge();
 
@@ -125,7 +128,9 @@ public class COTI extends Fragment {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
                     questionResponses.setVisibility(View.GONE);
+                    asking.setVisibility(View.GONE);
                 }else{
+                    asking.setVisibility(View.VISIBLE);
                     questionResponses.setVisibility(View.VISIBLE);
                     if(knowledge.get(0).getYes()>=knowledge.get(0).getNo()){
                         Random generator = new Random();
@@ -159,14 +164,20 @@ public class COTI extends Fragment {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
                     questionResponses.setVisibility(View.GONE);
+                    asking.setVisibility(View.GONE);
                 } else {
                     questionResponses.setVisibility(View.VISIBLE);
+                    asking.setVisibility(View.VISIBLE);
                     Random generator = new Random();
                     int i = generator.nextInt(positiveResponse.getAmount());
                     writer.setCharacterDelay(80);
                     writer.animateText(positiveResponse.getAgreement(i));
 
-                    int total = knowledge.get(0).getTotal();
+                    Knowledge k = knowledge.get(0);
+                    int total = k.getTotal();
+
+                    UpdateKnowledge updateKnowledge = new UpdateKnowledge();
+                    updateKnowledge.execute(k.getId()+"",0+"",k.getYes()+"",k.getNo()+"",k.getBans()+"");
 
                     MainActivity.memory.deleteKnowledge(knowledge.get(0).getId());
                     knowledge.remove(0);
@@ -229,15 +240,21 @@ public class COTI extends Fragment {
                 if (knowledge.size() <= 0) {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
+                    asking.setVisibility(View.GONE);
                     questionResponses.setVisibility(View.GONE);
                 } else {
                     questionResponses.setVisibility(View.VISIBLE);
+                    asking.setVisibility(View.VISIBLE);
                     Random generator = new Random();
                     int i = generator.nextInt(negativeResponse.getAmount());
                     writer.setCharacterDelay(80);
                     writer.animateText(negativeResponse.getDisagreement(i));
 
-                    int total = knowledge.get(0).getTotal();
+                    Knowledge k = knowledge.get(0);
+                    int total = k.getTotal();
+
+                    UpdateKnowledge updateKnowledge = new UpdateKnowledge();
+                    updateKnowledge.execute(k.getId()+"",1+"",k.getYes()+"",k.getNo()+"",k.getBans()+"");
                     MainActivity.memory.deleteKnowledge(knowledge.get(0).getId());
                     knowledge.remove(0);
 
@@ -299,8 +316,10 @@ public class COTI extends Fragment {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
                     questionResponses.setVisibility(View.GONE);
+                    asking.setVisibility(View.GONE);
                 } else {
                     questionResponses.setVisibility(View.VISIBLE);
+                    asking.setVisibility(View.VISIBLE);
                     writer.setCharacterDelay(80);
                     writer.animateText("Skipping..");
 
