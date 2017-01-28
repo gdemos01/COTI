@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.app.coti.coti.MainActivity;
 import com.app.coti.coti.R;
+import com.app.coti.coti.brain.GetKnowledge;
 import com.app.coti.coti.models.Knowledge;
 import com.app.coti.coti.models.NegativeResponse;
 import com.app.coti.coti.models.PositiveResponse;
@@ -73,15 +74,32 @@ public class COTI extends Fragment {
 
         knowledge = MainActivity.memory.getKnowledge();
 
-        if(knowledge.size()<10){
-            /**
-             * Download Knowledge
-             */
+        int total=0;
+
+        /**
+         * Set total for random
+         */
+        if(knowledge.size()==0){
+            total = 10;
+        }else{
+            total = knowledge.get(0).getTotal();
         }
 
-        knowledge.add(new Knowledge(1,"Nazis are very cool",3,1,0,0));
-        knowledge.add(new Knowledge(2,"Eating dick could kill you",3,1,0,0));
-        knowledge.add(new Knowledge(3,"Should I be a virgin?",1,3,0,0));
+        ArrayList<Integer> rand = new ArrayList<>();
+
+        if(knowledge.size()<10){
+            int count =0;
+            while(count<5){
+                Random generator = new Random();
+                int r = generator.nextInt(total)+1;
+                if(!rand.contains(r)){
+                    rand.add(r);
+                    GetKnowledge getKnowledge = new GetKnowledge();
+                    getKnowledge.execute(Integer.toString(r));
+                    count++;
+                }
+            }
+        }
 
         positiveResponse = new PositiveResponse();
         negativeResponse = new NegativeResponse();
@@ -95,6 +113,7 @@ public class COTI extends Fragment {
             public void run() {
                 writer.setCharacterDelay(200);
                 writer.animateText(".....");
+                knowledge = MainActivity.memory.getKnowledge();
             }
         },4000);
 
@@ -134,6 +153,8 @@ public class COTI extends Fragment {
             @Override
             public void onClick(View view) {
 
+                knowledge = MainActivity.memory.getKnowledge();
+
                 if (knowledge.size() <= 0) {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
@@ -145,9 +166,17 @@ public class COTI extends Fragment {
                     writer.setCharacterDelay(80);
                     writer.animateText(positiveResponse.getAgreement(i));
 
+                    int total = knowledge.get(0).getTotal();
+
                     MainActivity.memory.deleteKnowledge(knowledge.get(0).getId());
                     knowledge.remove(0);
+
                     // Download new knowledge
+                    Random gen = new Random();
+                    int r = gen.nextInt(total)+1;
+                    GetKnowledge getKnowledge = new GetKnowledge();
+                    getKnowledge.execute(Integer.toString(r));
+
                     // Update Online knowledge
 
                     final Handler handler = new Handler();
@@ -191,8 +220,12 @@ public class COTI extends Fragment {
         });
 
         disagree.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+
+                knowledge = MainActivity.memory.getKnowledge();
+
                 if (knowledge.size() <= 0) {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
@@ -204,9 +237,16 @@ public class COTI extends Fragment {
                     writer.setCharacterDelay(80);
                     writer.animateText(negativeResponse.getDisagreement(i));
 
+                    int total = knowledge.get(0).getTotal();
                     MainActivity.memory.deleteKnowledge(knowledge.get(0).getId());
                     knowledge.remove(0);
+
                     // Download new knowledge
+                    Random gen = new Random();
+                    int r = gen.nextInt(total)+1;
+                    GetKnowledge getKnowledge = new GetKnowledge();
+                    getKnowledge.execute(Integer.toString(r));
+
                     // Update online knowledge
 
                     final Handler handler = new Handler();
@@ -252,6 +292,9 @@ public class COTI extends Fragment {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                knowledge = MainActivity.memory.getKnowledge();
+
                 if (knowledge.size() <= 0) {
                     writer.setCharacterDelay(80);
                     writer.animateText("Nothing on my mind...Am I connected to the NET ?");
@@ -261,9 +304,21 @@ public class COTI extends Fragment {
                     writer.setCharacterDelay(80);
                     writer.animateText("Skipping..");
 
+                    int total = knowledge.get(0).getTotal();
                     MainActivity.memory.deleteKnowledge(knowledge.get(0).getId());
                     knowledge.remove(0);
+
                     // Download new knowledge
+                    Random gen = new Random();
+                    int r = gen.nextInt(total)+1;
+                    GetKnowledge getKnowledge = new GetKnowledge();
+                    getKnowledge.execute(Integer.toString(r));
+
+                    Random gen2 = new Random();
+                    int r2 = gen2.nextInt(total)+1;
+                    GetKnowledge getKnowledge2 = new GetKnowledge();
+                    getKnowledge2.execute(Integer.toString(r2));
+
                     // Update online knowledge
 
                     final Handler handler = new Handler();

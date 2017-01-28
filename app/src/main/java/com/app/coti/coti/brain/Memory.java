@@ -36,7 +36,7 @@ public class Memory extends SQLiteOpenHelper {
             + COL_YES + " INT NOT NULL ,"
             + COL_NO + " INT NOT NULL ,"
             + COL_TOTAL + " INT NOT NULL, "
-            + COL_BANS +"INT NOT NULL "+ ")";
+            + COL_BANS +" INT NOT NULL "+ ")";
 
 
     public Memory(Context context) {
@@ -58,8 +58,8 @@ public class Memory extends SQLiteOpenHelper {
     public void addKnowledge(Knowledge k) {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql =
-                "INSERT or replace INTO Knowledge (id, knowledge,yes,no,total,bans) VALUES("
-                        +k.getId()+ ",'" + k.getKnowledge() + "'"+k.getYes()+
+                "INSERT or replace INTO Knowledge (id,knowledge,yes,no,total,bans) VALUES("
+                        +k.getId()+ ",'" + escapeSQL(k.getKnowledge()) + "',"+k.getYes()+
                         ","+k.getNo()+","+k.getTotal()+","+k.getBans()+")";
         db.execSQL(sql);
     }
